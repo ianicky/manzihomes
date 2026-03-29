@@ -1,11 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Services() {
-  const router = useRouter();
 
   // ✅ State for multiple selection
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
@@ -19,15 +17,22 @@ export default function Services() {
     );
   };
 
-  // ✅ Proceed to quote page with multiple services
+  // ✅ Redirect directly to WhatsApp
   const handleProceed = () => {
     if (selectedServices.length === 0) return;
 
-    const query = selectedServices
-      .map((s) => encodeURIComponent(s))
-      .join(",");
+    const phoneNumber = "254718856612";
 
-    router.push(`/quote?services=${query}`);
+    const formattedServices = selectedServices.join(", ");
+
+    const message = `Hello, I'm interested in the following services: ${formattedServices}. I would like to request a quote.`;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+    // ✅ Direct redirect (no Next.js routing issues)
+    window.location.href = whatsappURL;
   };
 
   const serviceCategories = [
